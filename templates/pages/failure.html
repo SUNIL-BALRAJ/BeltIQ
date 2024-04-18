@@ -1,0 +1,904 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block breadcrumbs %}{% endblock breadcrumbs %}
+
+{% block content %}
+
+<html lang="en">
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/highcharts@10.7.1"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+
+<body>
+    <div class="card">
+        <div class="card-header">
+            <h3>Probability of Dislodgement in the upcomming month</h3>
+        </div>
+        <div class="card-block text-center">
+            <div id="chart-google-bar" style="width: 100%; height: 400px;"></div>
+            
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            setTimeout(function () {
+                google.charts.load('current', {
+                    packages: ['corechart', 'bar']
+                });
+                google.charts.setOnLoadCallback(drawStacked);
+
+                function drawStacked() {
+                    // Define the data with percentages
+                    var data = google.visualization.arrayToDataTable([
+                        ['Segment', 'Yes', 'No'],
+                        ['Segment 1', 0.22, 0.78],
+                        ['Segment 2', 0.67, 0.33],
+                        ['Segment 3', 0.17, 0.83],
+                        ['Segment 4', 0.74, 0.26],
+                        ['Segment 5', 0.31, 0.69]
+                    ]);
+
+                    var options = {
+                        title: ' ',
+                        chartArea: {
+                            width: '70%'
+                        },
+                        isStacked: true,
+                        hAxis: {
+                            title: 'Probability',
+                            format: 'percent', // Format the axis as percentages
+                            minValue: 0,
+                            ticks: [0, 0.2, 0.4, 0.6, 0.8, 1] // Adjust ticks as needed
+                        },
+                        vAxis: {
+                            title: 'Segment'
+                        },
+                        colors: ['#d00000', '#06d6a0'],
+                        legend: { position: 'bottom' },
+                        annotations: {
+                            textStyle: {
+                                fontSize: 12,
+                                bold: true,
+                                italic: false,
+                                color: '#000',     // The color of the text.
+                            },
+                            highContrast: false,
+                            boxStyle: {
+                                stroke: '#ccc',
+                                strokeWidth: 1,
+                                rx: 10,
+                                ry: 10,
+                                gradient: {
+                                    color1: '#f3e5f5',
+                                    color2: '#f3e5f5',
+                                    x1: '0%', y1: '0%',
+                                    x2: '100%', y2: '100%',
+                                    useObjectBoundingBoxUnits: false
+                                }
+                            },
+                            alwaysOutside: true,
+                            stem: {
+                                length: 5,
+                                color: '#fff',
+                            },
+                        }
+                    };
+
+                    var chart = new google.visualization.BarChart(document.getElementById('chart-google-bar'));
+                    chart.draw(data, options);
+                }
+            }, 700);
+        });
+    </script>
+</body>
+</html>
+
+<div class="card">
+    <div class="card-header">
+        <h2><b>Analysis</b></h2>
+    </div>
+    <div class="card-block">
+        <!DOCTYPE html>
+        <html lang="en">
+        
+        <head>
+            <!-- Include Highcharts library -->
+            <script src="https://code.highcharts.com/highcharts.js"></script>
+            <!-- Include jQuery library -->
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+        </head>
+        
+        <body>
+        
+            <div class="card">
+                <div class="card-header">
+                    <div class="dropdown" style="float: right;">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="segmentDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Segment 1
+                        </button>
+        
+                        <div class="dropdown-menu" aria-labelledby="segmentDropdown">
+                            <a class="dropdown-item" href="#" onclick="changeChartData(1)">Segment 1</a>
+                            <a class="dropdown-item" href="#" onclick="changeChartData(2)">Segment 2</a>
+                            <a class="dropdown-item" href="#" onclick="changeChartData(3)">Segment 3</a>
+                            <a class="dropdown-item" href="#" onclick="changeChartData(4)">Segment 4</a>
+                            <a class="dropdown-item" href="#" onclick="changeChartData(5)">Segment 5</a>
+                        </div>
+                    </div>
+                    <h4>Failure Frequency</h4>
+                </div>
+                <div class="card-block">
+                    <div id="chart-highchart-line1" style="width: 100%; height: 350px;"></div>
+                </div>
+            </div>
+        
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    // Initialize the chart with some default data
+                    var chart = Highcharts.chart('chart-highchart-line1', {
+                        chart: {
+                            type: 'spline',
+                        },
+                        colors: ['#1de9b6', '#FFA500'], // Add color for the second line
+                        title: {
+                            text: ''
+                        },
+                        subtitle: {
+                            text: ''
+                        },
+                        xAxis: {
+                            categories: ['Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'],
+                            plotLines: [{
+                                color: 'black',
+                                dashStyle: 'dot',
+                                width: 2,
+                                value: 9, // Index of December (zero-based)
+                                label: {
+                                    text: '',
+                                    rotation: 0,
+                                    textAlign: 'center',
+                                    y: 15
+                                }
+                            }]
+                        },
+                        yAxis: {
+                            title: {
+                                text: 'No of Failures'
+                            }
+                        },
+                        plotOptions: {
+                            series: {
+                                label: {
+                                    connectorAllowed: false
+                                },
+                                dashStyle: 'Solid', // Set the line style to solid for the first line
+                            }
+                        },
+                        series: [{
+                            name: 'Time',
+                            data: [1, 3, 2, 2, 2, 1, 1, 5, 1, 1, 3, 2,1]
+                        }],
+                        responsive: {
+                            rules: [{
+                                condition: {
+                                    maxWidth: 500
+                                },
+                                chartOptions: {
+                                    legend: {
+                                        layout: 'horizontal',
+                                        align: 'center',
+                                        verticalAlign: 'bottom'
+                                    }
+                                }
+                            }]
+                        }
+                    });
+        
+                    // Function to change chart data
+                    window.changeChartData = function (value) {
+                        if (event) {
+                            event.preventDefault();
+                        }
+                        var newData1;
+                        if (value === 1) {
+                            newData1 = [1, 3, 2, 2, 2, 1, 1, 5, 1, 1, 3, 2];
+                        } else if (value === 2) {
+                            newData1 = [3, 1, 3, 3, 3, 3, 3, 2, 3, 6, 3, 5];
+                        } else if (value === 3) {
+                            newData1 = [1, 3, 2, 2, 2, 1, 1, 5, 1, 1, 3, 2];
+                        } else if (value === 4) {
+                            newData1 = [3, 1, 3, 3, 3, 3, 3, 2, 3, 6, 3, 5];
+                        } else if (value === 5) {
+                            newData1 = [4, 2, 4, 5, 1, 2, 2, 2, 5, 3, 4, 4];
+                        }
+        
+                        // Update the existing chart's series data
+                        chart.series[0].update({
+                            data: newData1
+                        });
+        
+                        // Update the dropdown button text
+                        $("#segmentDropdown").text("Segment " + value);
+                    };
+        
+                    // Initial chart with Value 1 data
+                    changeChartData(1);
+                });
+            </script>
+        </body>
+        
+        </html>
+        
+        <!-- <!DOCTYPE html>
+        <html lang="en">
+        
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <script src="https://www.gstatic.com/charts/loader.js"></script>
+            <script>
+                google.charts.load('current', {
+                    callback: drawLineColors,
+                    packages: ['corechart']
+                });
+        
+                function drawLineColors() {
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('number', 'X');
+                    data.addColumn('number', 'Blue Team');
+                    data.addColumn('number', 'Red Team');
+        
+                    data.addRows([
+                        [0, 0, 0],
+                        [3, 1700, 1600],
+                        [6, 1800, 1700],
+                        [9, 2500, 2423],
+                        [12, 3000, 2500],
+                        [15, 4700, 5800],
+                        [18, 5200, 5900],
+                        [21, 5500, 6000],
+                        [24, 6000, 6200],
+                        [27, 6800, 6700],
+                        [30, 7500, 7000],
+                        [33, 7800, 8200],
+                        [36, 7900, 9756],
+                        [39, 8000, 10752],
+                        [42, 9000, 13753],
+                        [45, 15000, 17845]
+                    ]);
+        
+                    var options = {
+                        legend: {
+                            position: 'top'
+                        },
+                        enableInteractivity: false,
+                        width: 1100,
+                        height: 500,
+                        backgroundColor: {
+                            fill: 'transparent'
+                        },
+                        curveType: 'function',
+                        hAxis: {
+                            title: 'Time'
+                        },
+                        vAxis: {
+                            title: 'Team Gold'
+                        }
+                    };
+        
+                    var dataView = new google.visualization.DataView(data);
+                    dataView.setColumns([
+                        0,
+                        {
+                            calc: function (data, row) {
+                                return data.getValue(row, 1);
+                            },
+                            type: 'number',
+                            label: 'Y'
+                        },
+                        {
+                            calc: function (data, row) {
+                                // Use row index to determine color for the first six and next six values
+                                return row < 6 ? '#0000FF' : '#FF0000';
+                            },
+                            type: 'string',
+                            role: 'style'
+                        }
+                    ]);
+        
+                    var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+                    chart.draw(dataView, options);
+                }
+        
+                function updateChart() {
+                    // Implement code to update the chart based on the selected data
+                    var selectedValue = document.getElementById("dataDropdown").value;
+        
+                    // Modify the data based on the selected value
+                    var newData;
+                    if (selectedValue === "1") {
+                        // Update data for option 1
+                        newData = [
+                            [0, 0, 0],
+                            // ... new data for option 1 ...
+                        ];
+                    } else if (selectedValue === "2") {
+                        // Update data for option 2
+                        newData = [
+                            [0, 0, 0],
+                            // ... new data for option 2 ...
+                        ];
+                    } // Add more conditions as needed
+        
+                    // Update the existing chart's series data
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('number', 'X');
+                    data.addColumn('number', 'Blue Team');
+                    data.addColumn('number', 'Red Team');
+                    data.addRows(newData);
+        
+                    var dataView = new google.visualization.DataView(data);
+                    dataView.setColumns([
+                        0,
+                        {
+                            calc: function (data, row) {
+                                return data.getValue(row, 1);
+                            },
+                            type: 'number',
+                            label: 'Y'
+                        },
+                        {
+                            calc: function (data, row) {
+                                return row < 6 ? '#0000FF' : '#FF0000';
+                            },
+                            type: 'string',
+                            role: 'style'
+                        }
+                    ]);
+        
+                    chart.draw(dataView, options);
+                }
+            </script>
+        </head>
+        
+        <body>
+            Dropdown for selecting different data
+            <div class="card">
+                <div class="card-header">
+                    <h3>Failure Frequency</h3>
+                </div>
+                <div class="card-block">
+                    <div id="chart_div"></div>
+                    <div>
+                        <label for="dataDropdown">Select Data:</label>
+                        <select id="dataDropdown" onchange="updateChart()">
+                            <option value="1">Option 1</option>
+                            <option value="2">Option 2</option>
+                            Add more options as needed
+                        </select>
+                    </div>
+                </div>
+            </div>
+            Chart container
+        </body>
+        
+        </html> -->
+        
+        
+
+<html lang="en">
+<head>
+   <!-- Include Bootstrap CSS -->
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+   <!-- Include ECharts library -->
+   <script src="https://cdn.jsdelivr.net/npm/echarts@5.2.1/dist/echarts.min.js"></script>
+   <!-- Include jQuery library -->
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <script src="http://echarts.baidu.com/echarts2/doc/example/timelineOption.js"></script>
+   <script src="https://appsrv1-147a1.kxcdn.com/dattaable-pro/plugins/chart-echarts/js/echarts-en.min.js"></script>
+   <!-- Morris chart css -->
+   <link href="https://appsrv1-147a1.kxcdn.com/dattaable-pro/plugins/chart-morris/css/morris.css" rel="stylesheet">
+   <!-- Morris chart Js -->
+   <script src="https://appsrv1-147a1.kxcdn.com/dattaable-pro/plugins/chart-morris/js/raphael.min.js"></script>
+   <script src="https://appsrv1-147a1.kxcdn.com/dattaable-pro/plugins/chart-morris/js/morris.min.js"></script>
+   <!-- Chart tags Js -->
+   <script src="https://appsrv1-147a1.kxcdn.com/dattaable-pro/plugins/chart-chartjs/js/Chart.min.js"></script>
+   <!-- Include Bootstrap JS -->
+   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="card">
+    <div class="card-header">
+        <h4>Time since last Failure, MTBF and TTF</h4>
+    </div>
+    <div class="card-block">
+        <div id="chart-highchart-column" style="width: 100%; height: 450px;"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        setTimeout(function() {
+            Highcharts.chart('chart-highchart-column', {
+                title: {
+                    text: ''
+                },
+                xAxis: {
+                    categories: ['Segment 1 ', 'Segment 2 ', 'Segment 3', 'Segment 4 ', 'Segment 5'],
+                },
+                yAxis: {
+                            title: {
+                                text: 'Days'
+                            }
+                        },
+                colors: ['#1de9b6', '#1dc4e9', '#A389D4'],
+                labels: {
+                    items: [{
+                        html: 'Total fruit consumption',
+                        style: {
+                            left: '50px',
+                            top: '18px',
+                            color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                        }
+                    }]
+                },
+                series: [{
+                    type: 'column',
+                    name: 'Time since last failure',
+                    data: [30, 50, 20, 50, 41],
+                    dataLabels: {
+                        enabled: true,
+                        format: '{y} days'
+                    }
+                }, {
+                    type: 'column',
+                    name: 'MTBF',
+                    data: [100, 40, 80, 55, 82],
+                    dataLabels: {
+                        enabled: true,
+                        format: '{y} days'
+                    }
+                }, {
+                    type: 'column',
+                    name: 'Time to Failure',
+                    data: [70, 0, 60, 5, 41],
+                    dataLabels: {
+                        enabled: true,
+                        format: '{y} days'
+                    }
+                }]
+            });
+        }, 700);
+    });
+</script>
+
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <!-- NVD3 chart css -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.6/nv.d3.min.css" rel="stylesheet">
+
+    <!-- NVD3 chart Js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.6/nv.d3.min.js"></script>
+</head>
+<style>
+    .card-block {
+        text-align: center;
+    }
+
+    .nvd-chart {
+        display: inline-block;
+    }
+
+    .value-list {
+        list-style: none;
+        padding: 0;
+        text-align: left;
+    }
+
+    .value-list-item {
+        margin-bottom: 10px;
+    }
+
+    .value-list-item span {
+        font-weight: bold;
+        margin-right: 10px;
+    }
+        /* Style for the dropdown container */
+        .dropdown-container {
+            width: 200px; /* Adjust the width as needed */
+            margin: 20px;
+        }
+
+        /* Style for the dropdown itself */
+        #monthDropdown {
+            width: 60%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+        /* Style for the dropdown options */
+        #monthDropdown option {
+            font-size: 16px;
+        }
+    </style>
+</style>
+
+<body>
+
+    <div class="card">
+        <div class="card-header">
+            <h4>Operational Hours</h4>
+            <!-- Dropdown menu for months -->
+            <select id="monthDropdown" onchange="updateChart()">
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+            </select>
+        </div>
+        <div class="card-block">
+            <div id="nvd3-pie-1" class="nvd-chart" style="height: 500px; width: 500px;"></div>
+            <ul id="valueList" class="value-list"></ul>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        // Initial data for January
+        var currentMonth = 1;
+
+        // Predefined values and colors for each segment for each month
+        var dropdownValues = {
+            1: [150,400,213,467,112],
+            2: [163, 427, 178, 409, 192],
+            3: [213, 411, 178, 438, 223],
+            4: [143, 423, 199, 502, 178],
+            5: [147, 460, 245, 477, 229],
+            6: [156, 433, 212, 400, 198],
+            7: [166, 410, 233, 466, 241],
+            8: [171, 478, 124, 417, 156],
+            9: [171, 433, 216, 422, 234],
+            10: [189, 490, 148, 450, 199],
+            11: [255, 447, 238, 467, 178],
+            12: [211, 429, 248, 499, 177],
+        };
+
+        // Predefined colors for each segment
+        var segmentColors = ['#1a759f', '#168aad', '#34a0a4', '#52b69a', '#76c893'];
+
+        function updateChart() {
+            // Update the chart based on the selected month
+            currentMonth = parseInt($("#monthDropdown").val());
+            drawChart();
+        }
+
+        $(document).ready(function () {
+            // Initial chart rendering
+            drawChart();
+        });
+
+        function drawChart() {
+            nv.addGraph(function () {
+                var chart = nv.models.pieChart()
+                    .x(function (d) {
+                        return d.label;
+                    })
+                    .y(function (d) {
+                        return d.value;
+                    })
+                    .showLabels(true);
+
+                var data = pieData();
+                updateValueList(data);
+
+                d3.select("#nvd3-pie-1")
+                    .select("svg") // Select the existing chart SVG to update
+                    .remove(); // Remove the existing chart to draw a new one
+
+                d3.select("#nvd3-pie-1")
+                    .append('svg')
+                    .style('margin', 'auto')
+                    .datum(data)
+                    .transition().duration(350)
+                    .call(chart);
+
+                nv.utils.windowResize(chart.update);
+
+                return chart;
+            });
+        }
+
+        function pieData() {
+            // Data for each segment based on the selected month
+            var data = [];
+            var values = dropdownValues[currentMonth];
+
+            for (var i = 0; i < values.length; i++) {
+                data.push({
+                    "label": "Segment " + (i + 1),
+                    "value": values[i], // Use predefined values
+                    "color": segmentColors[i] // Use predefined colors
+                });
+            }
+            return data;
+        }
+
+        function updateValueList(data) {
+            // Update the value list based on the selected month
+            var valueList = $("#valueList");
+            valueList.empty();
+
+            data.forEach(function (item, index) {
+                var listItem = $("");
+                listItem.append("<span>" + item.label + ":</span> " + item.value.toFixed(2));
+                valueList.append(listItem);
+            });
+        }
+    </script>
+
+</body>
+
+</html>
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/highcharts@10.7.1"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <div class="card">
+        <div class="card-header">
+            <h5>Average Pulley Age</h5>
+        </div>
+        <div class="card-block">
+            <div id="chart-highchart-area2" style="width: 100%; height: 350px;"></div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            setTimeout(function () {
+                function generateRandomData(months) {
+                    var data = [];
+                    for (var i = 0; i < 5; i++) {
+                        data.push(Math.floor(Math.random() * 100)); 
+                    }
+                    return data;
+                }
+
+                Highcharts.chart('chart-highchart-area2', {
+                    chart: {
+                        zoomType: 'x',
+                    },
+                    title: {
+                        text: ''
+                    },
+                    xAxis: {
+                        categories: ['seg 1', 'seg 2', 'seg 3', 'seg 4', 'seg 5'],
+                        title: {
+                            text: 'Months'
+                        }
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Pulley age'
+                        }
+                    },
+                    legend: {
+                        enabled: true
+                    },
+                    plotOptions: {
+                        area: {
+                            fillColor: {
+                                linearGradient: {
+                                    x1: 0,
+                                    y1: 0,
+                                    x2: 0,
+                                    y2: 1
+                                },
+                                stops: [
+                                    [0, '#1dc4e9'],
+                                    [1, '#1de9b6']
+                                ]
+                            },
+                            marker: {
+                                radius: 2
+                            },
+                            lineWidth: 2,
+                            lineColor: '#1dc4e9',
+                            states: {
+                                hover: {
+                                    lineWidth: 1
+                                }
+                            },
+                            threshold: null
+                        }
+                    },
+                    series: [{
+                        type: 'area',
+                        name: 'Pulley Age',
+                        data: generateRandomData(12) 
+                    }]
+                });
+
+            }, 700);
+        });
+    </script>
+</body>
+
+</html> -->
+
+
+<!-- <html>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts-more.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<figure class="highcharts-figure">
+<div id="container"></div>
+<p class="highcharts-description">
+</p>
+</figure>
+</html>
+
+<style>
+  #container {
+    height: 400px;
+  }
+  
+  .highcharts-figure,
+  .highcharts-data-table table {
+    min-width: 310px;
+    max-width: 700px;
+    margin: 1em auto;
+  }
+  
+  .highcharts-data-table table {
+    font-family: Verdana, sans-serif;
+    border-collapse: collapse;
+    border: 1px solid #ebebeb;
+    margin: 10px auto;
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+  }
+  
+  .highcharts-data-table caption {
+    padding: 1em 0;
+    font-size: 1.2em;
+    color: #555;
+  }
+  
+  .highcharts-data-table th {
+    font-weight: 600;
+    padding: 0.5em;
+  }
+  
+  .highcharts-data-table td,
+  .highcharts-data-table th,
+  .highcharts-data-table caption {
+    padding: 0.5em;
+  }
+  
+  .highcharts-data-table thead tr,
+  .highcharts-data-table tr:nth-child(even) {
+    background: #f8f8f8;
+  }
+  
+  .highcharts-data-table tr:hover {
+    background: #f1f7ff;
+  }
+</style>
+
+<script>
+  Highcharts.chart('container', {
+
+    chart: {
+      type: 'boxplot'
+    },
+  
+    title: {
+      text: 'Highcharts Box Plot Example'
+    },
+  
+    legend: {
+      enabled: false
+    },
+  
+    xAxis: {
+      categories: ['1', '2', '3', '4', '5'],
+      title: {
+        text: 'Experiment No.'
+      }
+    },
+  
+    yAxis: {
+      title: {
+        text: 'Observations'
+      },
+      plotLines: [{
+        value: 932,
+        color: 'red',
+        width: 1,
+        label: {
+          text: 'Theoretical mean: 932',
+          align: 'center',
+          style: {
+            color: 'gray'
+          }
+        }
+      }]
+    },
+  
+    series: [{
+      name: 'Observations',
+      data: [
+        [760, 801, 848, 895, 965],
+        [733, 853, 939, 980, 1080],
+        [714, 762, 817, 870, 918],
+        [724, 802, 806, 871, 950],
+        [834, 836, 864, 882, 910]
+      ],
+      tooltip: {
+        headerFormat: '<em>Experiment No {point.key}</em><br/>'
+      }
+    }, {
+      name: 'Outliers',
+      color: Highcharts.getOptions().colors[0],
+      type: 'scatter',
+      data: [ // x, y positions where 0 is the first category
+        [0, 644],
+        [4, 718],
+        [4, 951],
+        [4, 969]
+      ],
+      marker: {
+        fillColor: 'white',
+        lineWidth: 1,
+        lineColor: Highcharts.getOptions().colors[0]
+      },
+      tooltip: {
+        pointFormat: 'Observation: {point.y}'
+      }
+    }]
+  
+  });
+</script> -->
+    </div>
+</div>
+
+{% endblock content %}  

@@ -1,0 +1,29 @@
+{
+  "channel": {
+    "id": 2375718,
+    "name": "Fault Detection in Conveyer Belt - Junction 1",
+    "latitude": "0.0",
+    "longitude": "0.0",
+    "field1": "Humidity (%)",
+    "field2": "Temperature (deg C)",
+    "field3": "Vibration Value",
+    "field4": "Accelerometer X Value",
+    "field5": "Accelerometer Y Value",
+    "field6": "Accelerometer Z Value",
+    "created_at": "2023-12-11T06:20:00Z",
+    "updated_at": "2023-12-11T06:20:01Z",
+    "last_entry_id": 1982
+  },
+  "feeds": [
+    {
+      "created_at": "2024-02-02T07:09:58Z",
+      "entry_id": 1982,
+      "field1": "\r\n43.00",
+      "field2": "22.00",
+      "field3": "952",
+      "field4": "338",
+      "field5": "350",
+      "field6": "445"
+    }
+  ]
+}

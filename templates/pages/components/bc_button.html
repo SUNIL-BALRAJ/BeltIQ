@@ -1,0 +1,70 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Stop Systems</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            margin: 20px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card h3 {
+            color: #007bff;
+        }
+
+        .card p {
+            margin-bottom: 15px;
+        }
+
+        .card img {
+            width: 100%;
+            height: 300px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="card-header">
+        <h3>Emergency Stop Systems</h3>
+    </div>
+    <img src="{% static 'assets/images/emergency.jpg' %}" alt="Emergency Stop System Image">
+    <div>
+        <b><p><strong>Explanation:</strong></p></b>
+        <p>Emergency stop systems are designed to immediately halt the conveyor system in the event of an impending dislodgment.</p>
+        <p><strong>Functionality:</strong> Emergency stop systems are designed to immediately halt the conveyor system in the event of an impending dislodgment.</p>
+        <p><strong>How it Works:</strong> The system relies on sensors strategically placed along the conveyor belt. These sensors continuously monitor parameters such as belt speed, alignment, and tension. If any irregularities indicative of a potential dislodgment are detected, the emergency stop system is triggered.</p>
+        <p><strong>Benefits:</strong> This mechanism provides a rapid response to emerging issues, preventing further damage to the conveyor system and reducing the risk of injuries or accidents. It acts as a fail-safe, ensuring that the conveyor comes to a swift stop when abnormal conditions are identified.</p>
+    </div>
+</div>
+
+</body>
+</html>
+
+{% endblock content %}

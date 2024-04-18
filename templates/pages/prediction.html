@@ -1,0 +1,368 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% load i18n static admin_datta %}
+{% block content %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+         $(".close").click(function(){
+        $(this).parent().fadeOut();
+     });
+    </script>
+
+    <title>YouTube Analysis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+        .contain{
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .card {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+
+        .header {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 5px;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .result-container {
+            margin-top: 30px;
+            width: 100%;
+            padding: 0 20px; /* Optional: Add horizontal padding for better readability */
+            box-sizing: border-box; /* Include padding in the width calculation */
+        }
+        
+
+        .result-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f7f7f7;
+            border-radius: 10px;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+
+        .result-header {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .result-text {
+            font-size: 18px;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .result-texts {
+            font-size: 18px;
+            padding: 10px;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        .ok {
+            background-color: #7ed321;
+            color: #fff;
+        }
+
+        .warning {
+            background-color: #ffcc00;
+            color: #fff;
+        }
+
+        .good {
+            background-color: #7ed321;
+            color: #fff;
+        }
+
+        .not-good {
+            background-color: #ff5a5f;
+            color: #fff;
+        }
+          .alert{
+            display: flex;
+            align-items:center;
+            padding: 0.55rem 0.65rem 0.55rem 0.75rem;
+            border-radius:1rem;
+            min-width:400px;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            box-shadow:
+            0px 3.2px 13.8px rgba(0, 0, 0, 0.02),
+            0px 7.6px 33.3px rgba(0, 0, 0, 0.028),
+            0px 14.4px 62.6px rgba(0, 0, 0, 0.035),
+            0px 25.7px 111.7px rgba(0, 0, 0, 0.042),
+            0px 48px 208.9px rgba(0, 0, 0, 0.05),
+            0px 115px 500px rgba(0, 0, 0, 0.07)
+          }
+          .content{
+            display: flex;
+            align-items:center;
+          }
+          .icon{
+            padding: 0.5rem;
+            margin-right: 1rem;
+            border-radius:39% 61% 42% 58% / 50% 51% 49% 50%;
+            box-shadow:
+            0px 3.2px 13.8px rgba(0, 0, 0, 0.02),
+            0px 7.6px 33.3px rgba(0, 0, 0, 0.028),
+            0px 14.4px 62.6px rgba(0, 0, 0, 0.035),
+            0px 25.7px 111.7px rgba(0, 0, 0, 0.042),
+            0px 48px 208.9px rgba(0, 0, 0, 0.05),
+            0px 115px 500px rgba(0, 0, 0, 0.07)
+          }
+          .close{
+            background-color: transparent;
+            border:none;
+            outline:none;
+            transition:all 0.2s ease-in-out;
+            padding: 0.75rem;
+            border-radius:0.5rem;
+            cursor:pointer;
+            display: flex;
+            align-items:center;
+            justify-content: center;
+          }
+          .close:hover{
+            background-color: #fff;
+          }
+          
+          .success{
+            background-color: rgba(62, 189, 97,0.2);
+            border:2px solid #3ebd61;
+          }
+          .success .icon{
+            background-color:#3ebd61;
+          }
+          .info{
+            background-color: rgba(0, 108, 227,0.2);
+            border:2px solid #006CE3;
+          }
+          .info .icon{
+            background-color: #006CE3;
+          }
+          
+          
+          .warning .icon{
+            background-color: #EF9400;
+          }
+          
+          .danger{
+            background-color: rgba(236, 77, 43, 0.2);
+            border:2px solid #EF9400;
+          }
+          .danger .icon{
+            background-color: #EC4D2B;
+          }
+          .card-block {
+    background-image: url('{% static 'assets/images/pulley.jpg' %}'); 
+    background-size: contain; /* Change this property to 'cover' or 'contain' as per your preference */
+    position: relative; 
+    background-repeat: no-repeat;
+    height: 80vh;
+}
+
+
+        .signal-tower {
+  background-color: rgba(255, 255, 255, 0);
+  position: absolute;
+  top: 30%;
+  transform: translateY(-50%);
+}
+
+.left-tower {
+  left: 300px;
+}
+
+.right-tower {
+  right: 300px;
+}
+
+.alert-active {
+  background-color: red;
+  animation: alert-blink 1s infinite;
+  border-radius: 50%;
+  top: 29%;  
+  width: 30px;         
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+@keyframes alert-blink {
+  50% { opacity: 0.5; }
+}
+          
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <h2 class="header">LIVE MONITORING AND PREDICTION</h2>
+            <form method="post" class="analysis-form">
+                {% csrf_token %}
+               
+                <button type="submit" class="btn btn-primary">Start prediction</button>
+            </form>
+        </div>
+
+        <div class="result-container">
+            {% if latest_analysis_result %}
+            <h2 class="header">Analysis Result</h2>
+            <div class="contain">
+              <div class="danger alert">
+                <div class="content">
+                  <div class="icon">
+                    <svg height="50" viewBox="0 0 512 512" width="50" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" d="M449.07,399.08,278.64,82.58c-12.08-22.44-44.26-22.44-56.35,0L51.87,399.08A32,32,0,0,0,80,446.25H420.89A32,32,0,0,0,449.07,399.08Zm-198.6-1.83a20,20,0,1,1,20-20A20,20,0,0,1,250.47,397.25ZM272.19,196.1l-5.74,122a16,16,0,0,1-32,0l-5.74-121.95v0a21.73,21.73,0,0,1,21.5-22.69h.21a21.74,21.74,0,0,1,21.73,22.7Z"/></svg>
+                </div>
+                  <p style="font-size:25px;"><b>ALERT&nbsp!!!!!</b></p>
+                </div>
+                <button class="close">
+                 <svg height="18px" id="Layer_1" style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="18px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path fill="#69727D" d="M437.5,386.6L306.9,256l130.6-130.6c14.1-14.1,14.1-36.8,0-50.9c-14.1-14.1-36.8-14.1-50.9,0L256,205.1L125.4,74.5  c-14.1-14.1-36.8-14.1-50.9,0c-14.1,14.1-14.1,36.8,0,50.9L205.1,256L74.5,386.6c-14.1,14.1-14.1,36.8,0,50.9  c14.1,14.1,36.8,14.1,50.9,0L256,306.9l130.6,130.6c14.1,14.1,36.8,14.1,50.9,0C451.5,423.4,451.5,400.6,437.5,386.6z"/></svg>
+                </button>
+              </div>
+            <div class="card">
+                <div class="card-block">
+                    <div>
+                        <svg height="100" width="100" class="signal-tower left-tower">
+                          <circle cx="50" cy="50" r="10"/>
+                        </svg>
+                        <svg height="100" width="100" class="signal-tower right-tower">
+                          <circle cx="50" cy="50" r="10"/>
+                        </svg>
+                  </div>
+                  
+                </div>
+            </div>                   
+              </div>
+           
+            <div class="result-item">
+                <h3 class="result-header">Segment</h3>
+                <p class="result-text warning">{{ latest_analysis_result.location }}</p>
+            </div>
+            <div class="result-item">
+                <h3 class="result-header">Reason</h3>
+                <p class="result-text">{{ latest_analysis_result.reason }}</p>
+            </div>
+        
+            <audio id="alertAudio" autoplay>
+              <source src="{% static 'assets/alert-sound.mp3' %}" type="audio/mpeg">
+              Your browser does not support the audio element.
+            </audio>
+            
+            {% endif %}
+        </div>
+    </div>
+</body>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const leftTower = document.querySelector('.left-tower');
+    const rightTower = document.querySelector('.right-tower');
+    const alertAudio = document.getElementById('alertAudio');
+    let audioTimeout;
+
+    function checkFaults() {
+      const faultLocation = 1; // Replace with your actual fault location logic
+
+      if (faultLocation === 1) {
+        leftTower.classList.add('alert-active');
+        rightTower.classList.remove('alert-active');
+        playAlertSound();
+      } else if (faultLocation === 2) {
+        leftTower.classList.remove('alert-active');
+        rightTower.classList.add('alert-active');
+        playAlertSound();
+      } else {
+        leftTower.classList.remove('alert-active');
+        rightTower.classList.remove('alert-active');
+        stopAlertSound();
+      }
+    }
+
+    function playAlertSound() {
+      alertAudio.play();
+      audioTimeout = setTimeout(stopAlertSound, 3000); // Stop after 3 seconds
+    }
+
+    function stopAlertSound() {
+      alertAudio.pause();
+      alertAudio.currentTime = 0; // Reset audio to the beginning
+      clearTimeout(audioTimeout); // Clear the timeout to stop the sound
+    }
+
+    checkFaults();
+
+    setInterval(checkFaults, 5000);
+
+    // Close button functionality
+    const closeButton = document.querySelector('.close');
+    closeButton.addEventListener('click', function() {
+      const alert = document.querySelector('.alert');
+      alert.style.display = 'none';
+      stopAlertSound(); // Stop the sound when closing the alert
+    });
+  });
+</script>
+</html>
+
+{% endblock content %}

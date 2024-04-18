@@ -1,0 +1,687 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block breadcrumbs %}{% endblock breadcrumbs %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Include Highcharts library -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <!-- Include jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Include moment.js and moment-timezone.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.33/moment-timezone.min.js"></script>
+</head>
+
+<body>
+    <div class="card">
+        <div class="card-header">
+            <h5>Humidity Chart</h5>
+        </div>
+        <div class="card-block">
+            <div id="temperatureChart1" style="height: 300px;"></div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var temperatureData = [];
+            var chart;
+ 
+            // Function to fetch JSON data and update the chart
+            function updateTemperatureChart() {
+                // Fetch the JSON file
+                $.getJSON('{% static 'assets/thingspeaks_data.json' %}', function (data) {
+                    // Get the temperature value from the JSON data
+                    
+                    var temperature = parseFloat(data.feeds[0].field1);
+                    
+
+                    // Get the current timestamp in milliseconds in Indian time zone
+                    var timestamp = moment.tz('Asia/Kolkata').valueOf();
+
+                    // Add 5 hours and 30 minutes to the timestamp
+                    timestamp = moment(timestamp).add(5, 'hours').add(30, 'minutes').valueOf();
+
+                    // Add the new temperature value with the adjusted timestamp to the data array
+                    temperatureData.push({ x: timestamp, y: temperature });
+
+                    // Limit the data array to the last 10 values
+                    if (temperatureData.length > 10) {
+                        temperatureData.shift();
+                    }
+
+                    // Update the chart series with the new data
+                    chart.series[0].setData(temperatureData);
+                });
+            }
+
+            // Initialize the chart
+            chart = Highcharts.chart('temperatureChart1', {
+                chart: {
+                    type: 'spline',
+                    animation: Highcharts.svg, // don't animate in old IE
+                    marginRight: 10
+                },
+                title: {
+                    text: 'Live Humidity Chart'
+                },
+                xAxis: {
+                    type: 'datetime',
+                    tickPixelInterval: 50,
+                    dateTimeLabelFormats: {
+                        second: '%H:%M:%S'
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: 'Humidity (%)'
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                series: [{
+                    name: 'Humidity',
+                    data: temperatureData
+                }]
+            });
+
+            // Update the chart every 2 seconds
+            setInterval(updateTemperatureChart, 5000);
+
+            // Initial update
+            updateTemperatureChart();
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Include Highcharts library -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <!-- Include jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <div class="card">
+        <div class="card-header">
+            <h5>Temperature Chart</h5>
+        </div>
+        <div class="card-block">
+            <div id="temperatureChart2" style="height: 300px;"></div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var temperatureData = [];
+            var chart;
+
+            // Function to fetch JSON data and update the chart
+            function updateTemperatureChart() {
+                // Fetch the JSON file
+                $.getJSON('{% static 'assets/thingspeaks_data.json' %}', function (data) {
+                    // Get the temperature value from the JSON data
+                    var temperature = parseFloat(data.feeds[0].field2);
+
+                    // Get the current timestamp in milliseconds in Indian time zone
+                    var timestamp = moment.tz('Asia/Kolkata').valueOf();
+
+                    // Add 5 hours and 30 minutes to the timestamp
+                    timestamp = moment(timestamp).add(5, 'hours').add(30, 'minutes').valueOf();
+
+                    // Add the new temperature value with the adjusted timestamp to the data array
+                    temperatureData.push({ x: timestamp, y: temperature });
+
+                    // Limit the data array to the last 10 values
+                    if (temperatureData.length > 10) {
+                        temperatureData.shift();
+                    }
+
+                    // Update the chart series with the new data
+                    chart.series[0].setData(temperatureData);
+                });
+            }
+
+            // Initialize the chart
+            chart = Highcharts.chart('temperatureChart2', {
+                chart: {
+                    type: 'spline',
+                    animation: Highcharts.svg, // don't animate in old IE
+                    marginRight: 10
+                },
+                title: {
+                    text: 'Live Temperature Chart'
+                },
+                xAxis: {
+                    type: 'datetime',
+                    tickPixelInterval: 50,
+                    dateTimeLabelFormats: {
+                        second: '%H:%M:%S'
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: 'Temperature (C)'
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                series: [{
+                    name: 'Temperature',
+                    data: temperatureData
+                }]
+            });
+
+            // Update the chart every 2 seconds
+            setInterval(updateTemperatureChart, 5000);
+
+            // Initial update
+            updateTemperatureChart();
+        });
+    </script>
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Include Highcharts library -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <!-- Include jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <div class="card">
+        <div class="card-header">
+            <h5>Ultrasonic Data</h5>
+        </div>
+        <div class="card-block">
+            <div id="ultrasonicChart" style="height: 300px;"></div>
+            <div id="alertContainer"></div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var chart;
+            var alertShown = false; // Variable to track if alert has been shown
+
+            // Function to fetch data from data.txt and update the chart
+            function updateUltrasonicChart() {
+                // Fetch the data from data.txt
+                $.get('{% static 'assets/ardruino.txt' %}', function (data) {
+                    // Extract numeric value from the last line
+                    var lines = data.trim().split('\n');
+                    var lastLine = lines[lines.length - 1];
+                    var value = parseFloat(lastLine.replace('DISTANCE:', '').trim());
+
+                    if (!isNaN(value)) {
+                        // Get the current timestamp
+                        var timestamp = Date.now();
+
+                        // Update the chart series with the new data
+                        chart.series[0].addPoint({ x: timestamp, y: value });
+
+                        // Limit the data array to the last 10 values
+                        if (chart.series[0].data.length > 10) {
+                            chart.series[0].data[0].remove();
+                        }
+
+                        // Check if value is above 10 and alert has not been shown
+                        if (value < 10 && !alertShown) {
+                            alertShown = true; // Set the flag to true
+                            // Display alert under the chart
+                            $('#alertContainer').html('<div class="alert alert-warning" role="alert">Belt is moving out of line!</div>');
+                        }
+                    }
+                });
+            }
+
+            // Initialize the chart
+            chart = Highcharts.chart('ultrasonicChart', {
+                // ... (your existing chart configuration)
+                chart: {
+                    type: 'spline',
+                    animation: Highcharts.svg, // don't animate in old IE
+                    marginRight: 10
+                },
+                title: {
+                    text: 'Live Ultrasonic Data'
+                },
+                xAxis: {
+                    type: 'datetime',
+                    tickPixelInterval: 50,
+                    dateTimeLabelFormats: {
+                        second: '%H:%M:%S'
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: 'Ultrasonic (kHz)'
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                series: [{
+                    name: 'Ultrasonic',
+                    data: []
+                }]
+            });
+
+            // Update the chart every 2 seconds
+            setInterval(updateUltrasonicChart, 2000);
+
+            // Initial update
+            updateUltrasonicChart();
+        });
+    </script>
+</body>
+
+</html>
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Include Highcharts library -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <!-- Include jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <div class="card">
+        <div class="card-header">
+            <h5>Vibration Chart</h5>
+        </div>
+        <div class="card-block">
+            <div id="temperatureChart3" style="height: 300px;"></div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var temperatureData = [];
+            var chart;
+
+            // Function to fetch JSON data and update the chart
+            function updateTemperatureChart() {
+                // Fetch the JSON file
+                $.getJSON('{% static 'assets/thingspeaks_data.json' %}', function (data) {
+                    // Get the temperature value from the JSON data
+                    var temperature = parseFloat(data.feeds[0].field3);
+
+                    // Get the current timestamp in milliseconds in Indian time zone
+                    var timestamp = moment.tz('Asia/Kolkata').valueOf();
+
+                    // Add 5 hours and 30 minutes to the timestamp
+                    timestamp = moment(timestamp).add(5, 'hours').add(30, 'minutes').valueOf();
+
+                    // Add the new temperature value with the adjusted timestamp to the data array
+                    temperatureData.push({ x: timestamp, y: temperature });
+
+                    // Limit the data array to the last 10 values
+                    if (temperatureData.length > 10) {
+                        temperatureData.shift();
+                    }
+
+                    // Update the chart series with the new data
+                    chart.series[0].setData(temperatureData);
+                });
+            }
+
+            // Initialize the chart
+            chart = Highcharts.chart('temperatureChart3', {
+                chart: {
+                    type: 'spline',
+                    animation: Highcharts.svg, // don't animate in old IE
+                    marginRight: 10
+                },
+                title: {
+                    text: 'Live Vibration Chart'
+                },
+                xAxis: {
+                    type: 'datetime',
+                    tickPixelInterval: 50,
+                    dateTimeLabelFormats: {
+                        second: '%H:%M:%S'
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: 'Vibration (Hertz)'
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                series: [{
+                    name: 'Vibration',
+                    data: temperatureData
+                }]
+            });
+
+            // Update the chart every 2 seconds
+            setInterval(updateTemperatureChart, 5000);
+
+            // Initial update
+            updateTemperatureChart();
+        });
+    </script>
+</body>
+
+</html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Include Highcharts library -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <!-- Include jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <div class="card">
+        <div class="card-header">
+            <h5>Accelerometer(x) Chart</h5>
+        </div>
+        <div class="card-block">
+            <div id="temperatureChart4" style="height: 300px;"></div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var temperatureData = [];
+            var chart;
+
+            // Function to fetch JSON data and update the chart
+            function updateTemperatureChart() {
+                // Fetch the JSON file
+                $.getJSON('{% static 'assets/thingspeaks_data.json' %}', function (data) {
+                    // Get the temperature value from the JSON data
+                    var temperature = parseFloat(data.feeds[0].field4);
+
+                    // Get the current timestamp in milliseconds in Indian time zone
+                    var timestamp = moment.tz('Asia/Kolkata').valueOf();
+
+                    // Add 5 hours and 30 minutes to the timestamp
+                    timestamp = moment(timestamp).add(5, 'hours').add(30, 'minutes').valueOf();
+
+                    // Add the new temperature value with the adjusted timestamp to the data array
+                    temperatureData.push({ x: timestamp, y: temperature });
+
+                    // Limit the data array to the last 10 values
+                    if (temperatureData.length > 10) {
+                        temperatureData.shift();
+                    }
+
+                    // Update the chart series with the new data
+                    chart.series[0].setData(temperatureData);
+                });
+            }
+
+            // Initialize the chart
+            chart = Highcharts.chart('temperatureChart4', {
+                chart: {
+                    type: 'spline',
+                    animation: Highcharts.svg, // don't animate in old IE
+                    marginRight: 10
+                },
+                title: {
+                    text: 'Live Accelerometer(x) Chart'
+                },
+                xAxis: {
+                    type: 'datetime',
+                    tickPixelInterval: 50,
+                    dateTimeLabelFormats: {
+                        second: '%H:%M:%S'
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: 'Accelerometer'
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                series: [{
+                    name: 'Accelerometer',
+                    data: temperatureData
+                }]
+            });
+
+            // Update the chart every 2 seconds
+            setInterval(updateTemperatureChart, 5000);
+
+            // Initial update
+            updateTemperatureChart();
+        });
+    </script>
+</body>
+
+</html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Include Highcharts library -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <!-- Include jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <div class="card">
+        <div class="card-header">
+            <h5>Accelerometer(y) Chart</h5>
+        </div>
+        <div class="card-block">
+            <div id="temperatureChart5" style="height: 300px;"></div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var temperatureData = [];
+            var chart;
+
+            // Function to fetch JSON data and update the chart
+            function updateTemperatureChart() {
+                // Fetch the JSON file
+                $.getJSON('{% static 'assets/thingspeaks_data.json' %}', function (data) {
+                    // Get the temperature value from the JSON data
+                    var temperature = parseFloat(data.feeds[0].field5);
+
+                    // Get the current timestamp in milliseconds in Indian time zone
+                    var timestamp = moment.tz('Asia/Kolkata').valueOf();
+
+                    // Add 5 hours and 30 minutes to the timestamp
+                    timestamp = moment(timestamp).add(5, 'hours').add(30, 'minutes').valueOf();
+
+                    // Add the new temperature value with the adjusted timestamp to the data array
+                    temperatureData.push({ x: timestamp, y: temperature });
+
+                    // Limit the data array to the last 10 values
+                    if (temperatureData.length > 10) {
+                        temperatureData.shift();
+                    }
+
+                    // Update the chart series with the new data
+                    chart.series[0].setData(temperatureData);
+                });
+            }
+
+            // Initialize the chart
+            chart = Highcharts.chart('temperatureChart5', {
+                chart: {
+                    type: 'spline',
+                    animation: Highcharts.svg, // don't animate in old IE
+                    marginRight: 10
+                },
+                title: {
+                    text: 'Live Accelerometer(y) Chart'
+                },
+                xAxis: {
+                    type: 'datetime',
+                    tickPixelInterval: 50,
+                    dateTimeLabelFormats: {
+                        second: '%H:%M:%S'
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: 'Accelerometer'
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                series: [{
+                    name: 'Accelerometer',
+                    data: temperatureData
+                }]
+            });
+
+            // Update the chart every 2 seconds
+            setInterval(updateTemperatureChart, 5000);
+
+            // Initial update
+            updateTemperatureChart();
+        });
+    </script>
+</body>
+
+</html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Include Highcharts library -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <!-- Include jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <div class="card">
+        <div class="card-header">
+            <h5>Accelerometer(z) Chart</h5>
+        </div>
+        <div class="card-block">
+            <div id="temperatureChart6" style="height: 300px;"></div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var temperatureData = [];
+            var chart;
+
+            // Function to fetch JSON data and update the chart
+            function updateTemperatureChart() {
+                // Fetch the JSON file
+                $.getJSON('{% static 'assets/thingspeaks_data.json' %}', function (data) {
+                    // Get the temperature value from the JSON data
+                    var temperature = parseFloat(data.feeds[0].field6);
+
+                    // Get the current timestamp in milliseconds in Indian time zone
+                    var timestamp = moment.tz('Asia/Kolkata').valueOf();
+
+                    // Add 5 hours and 30 minutes to the timestamp
+                    timestamp = moment(timestamp).add(5, 'hours').add(30, 'minutes').valueOf();
+
+                    // Add the new temperature value with the adjusted timestamp to the data array
+                    temperatureData.push({ x: timestamp, y: temperature });
+
+                    // Limit the data array to the last 10 values
+                    if (temperatureData.length > 10) {
+                        temperatureData.shift();
+                    }
+
+                    // Update the chart series with the new data
+                    chart.series[0].setData(temperatureData);
+                });
+            }
+
+            // Initialize the chart
+            chart = Highcharts.chart('temperatureChart6', {
+                chart: {
+                    type: 'spline',
+                    animation: Highcharts.svg, // don't animate in old IE
+                    marginRight: 10
+                },
+                title: {
+                    text: 'Live Accelromter(z) Chart'
+                },
+                xAxis: {
+                    type: 'datetime',
+                    tickPixelInterval: 50,
+                    dateTimeLabelFormats: {
+                        second: '%H:%M:%S'
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: 'Accelerometer'
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                series: [{
+                    name: 'Accelerometer',
+                    data: temperatureData
+                }]
+            });
+
+            // Update the chart every 2 seconds
+            setInterval(updateTemperatureChart, 5000);
+
+            // Initial update
+            updateTemperatureChart();
+        });
+    </script>
+</body>
+
+</html>
+
+{% endblock content %}  

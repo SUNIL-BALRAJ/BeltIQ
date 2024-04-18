@@ -1,0 +1,70 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automated Alignment Systems</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            margin: 20px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card h3 {
+            color: #007bff;
+        }
+
+        .card p {
+            margin-bottom: 15px;
+        }
+
+        .card img {
+            width: 100%;
+            height: 300px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="card-header">
+        <h3>Automated Alignment Systems</h3>
+    </div>
+    <img src="{% static 'assets/images/automated.jpg' %}" alt="Emergency Stop System Image">
+    <div>
+        <b><p><strong>Explanation:</strong></p></b>
+        <p>Automated alignment systems actively maintain the proper positioning of the conveyor belt by making real-time adjustments.</p>
+        <p><strong>Functionality:</strong> Automated alignment systems actively maintain the proper positioning of the conveyor belt by making real-time adjustments.</p>
+        <p><strong>How it Works:</strong> Optical sensors or laser-based systems are commonly used to monitor the alignment of the conveyor belt. When misalignment is detected, the system triggers corrective measures, such as adjusting the idlers or activating steering mechanisms.</p>
+        <p><strong>Benefits:</strong> By automatically correcting belt misalignment, this mechanism minimizes the risk of dislodgments caused by the belt veering off its intended path. It ensures consistent alignment, even in dynamic operational conditions, contributing to smoother material flow and reduced wear on the conveyor components.</p>
+    </div>
+</div>
+
+</body>
+</html>
+
+{% endblock content %}
